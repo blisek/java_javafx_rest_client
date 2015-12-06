@@ -16,6 +16,9 @@ public class App {
 	private static BookProvider provider;
 
 	public static void main(String[] args) throws Exception {
+		/*
+		 * REV: 
+		 */
 		provider = new BookProviderImpl("http://localhost:9721/workshop/services/books");
 
 		BookTO anotherBook = new BookTO(null, "Another book", Arrays.asList(new AuthorTO(null, "Johnny", "Brasco")),

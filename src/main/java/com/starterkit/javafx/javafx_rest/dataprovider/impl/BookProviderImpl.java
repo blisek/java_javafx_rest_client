@@ -36,20 +36,36 @@ public class BookProviderImpl implements BookProvider {
 	public List<BookTO> findAllBooks() {
 		List<BookTO> books = null;
 		try {
+			/*
+			 * REV: zawsze uzywaj loggera
+			 */
 			System.out.println("Request to: " + booksByTitlePrefixURL.toString());
 			HttpURLConnection connection = HttpConnectionHelper.openConnection(booksByTitlePrefixURL,
 					HttpConnectionHelper.RequestMethod.GET,
 					HttpConnectionHelper.joinParamValue(TITLE_PREFIX_PARAM, ""));
 
 			if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+				/*
+				 * REV: ObjectMapper powinien byc utworzony tylko raz i uzywany wielokrotnie
+				 * masz juz ObjectMappera w klasie
+				 */
 				ObjectMapper mapper = new ObjectMapper();
 				books = (List<BookTO>) objectMapper.readValue(connection.getInputStream(),
 						mapper.getTypeFactory().constructCollectionType(List.class, BookTO.class));
 			} else {
+				/*
+				 * REV: zawsze uzywaj loggera
+				 */
 				System.err.println("Invalid response code: " + connection.getResponseCode());
 			}
 		} catch (Exception ex) {
+			/*
+			 * REV: j.w.
+			 */
 			System.err.println("[BookProviderImpl.findAllBooks] Error:" + ex.getMessage());
+			/*
+			 * REV: wyjatek powinien byc rzucony dalej, tak aby wyswietlic blad na gui
+			 */
 		}
 
 		return books;
@@ -66,9 +82,15 @@ public class BookProviderImpl implements BookProvider {
 			if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				tmpBook = objectMapper.readValue(connection.getInputStream(), BookTO.class);
 			} else {
+				/*
+				 * REV: j.w.
+				 */
 				System.err.println("Invalid response code: " + connection.getResponseCode());
 			}
 		} catch (Exception ex) {
+			/*
+			 * REV: j.w.
+			 */
 			System.err.println("[BookProviderImpl.saveBook] Error:" + ex.getMessage());
 		}
 
@@ -77,6 +99,9 @@ public class BookProviderImpl implements BookProvider {
 
 	@Override
 	public boolean updateBook(BookTO bookTO) {
+		/*
+		 * REV: lepiej rzucic wyjatek niz zwracac flage
+		 */
 		boolean result = false;
 		try {
 			String bookTOJson = BookTOMapper.toJSON(bookTO);
@@ -86,10 +111,16 @@ public class BookProviderImpl implements BookProvider {
 			if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				result = true;
 			} else {
+				/*
+				 * REV: j.w.
+				 */
 				System.err.println("Invalid response code: " + connection.getResponseCode());
 				result = false;
 			}
 		} catch (Exception ex) {
+			/*
+			 * REV: j.w.
+			 */
 			System.err.println("[BookProviderImpl.updateBook] Error:" + ex.getMessage());
 			result = false;
 		}
@@ -99,6 +130,9 @@ public class BookProviderImpl implements BookProvider {
 
 	@Override
 	public boolean deleteBook(BookTO bookTO) {
+		/*
+		 * REV: j.w.
+		 */
 		boolean result = false;
 		try {
 			HttpURLConnection connection = HttpConnectionHelper.openConnection(bookRest,
@@ -108,10 +142,16 @@ public class BookProviderImpl implements BookProvider {
 			if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
 				result = true;
 			} else {
+				/*
+				 * REV: j.w.
+				 */
 				System.err.println("Invalid response code: " + connection.getResponseCode());
 				result = false;
 			}
 		} catch (Exception ex) {
+			/*
+			 * REV: j.w.
+			 */
 			System.err.println("[BookProviderImpl.deleteBook] Error:" + ex.getMessage());
 			result = false;
 		}

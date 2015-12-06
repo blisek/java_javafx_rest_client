@@ -37,6 +37,9 @@ public class HttpConnectionHelper {
 			try (DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream())) {
 				dataOutputStream.writeBytes(params);
 				dataOutputStream.flush();
+				/*
+				 * REV: dataOutputStream nie jest zamykany
+				 */
 			}
 			break;
 		}

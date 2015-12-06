@@ -15,6 +15,9 @@ import com.starterkit.javafx.javafx_rest.model.to.BookTO;
 public class BookTOMapper {
 
 	public static BookTO fromJSON(InputStream json) throws JsonParseException, JsonMappingException, IOException {
+		/*
+		 * REV: ObjectMapper powinien byc utworzony tylko raz i uzywany wielokrotnie
+		 */
 		return new ObjectMapper().readValue(json, BookTO.class);
 	}
 
@@ -23,11 +26,17 @@ public class BookTOMapper {
 		if (os == null) {
 			os = new ByteArrayOutputStream(256);
 		}
+		/*
+		 * REV: j.w.
+		 */
 		new ObjectMapper().writeValue(os, bookTO);
 		return os;
 	}
 
 	public static String toJSON(BookTO bookTO) throws JsonProcessingException {
+		/*
+		 * REV: j.w.
+		 */
 		return new ObjectMapper().writeValueAsString(bookTO);
 	}
 }
